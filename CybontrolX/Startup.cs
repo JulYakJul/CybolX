@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using CybontrolX.DataBase;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 
@@ -20,6 +21,9 @@ namespace CybontrolX
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddControllers();
             services.AddCors(options =>
             {
