@@ -31,10 +31,38 @@
     <thead>
         <tr>
             <th scope="col"></th>
-            <th scope="col">Название</th>
-            <th scope="col">Цена закупки</th>
-            <th scope="col">Цена продажи</th>
-            <th scope="col">Количество</th>
+            <th scope="col">
+                <a href="?SortColumn=Name&SortDescending=@(!Model.SortDescending)">
+                    Название @if (Model.SortColumn == "Name")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SortColumn=PurchasePrice&SortDescending=@(!Model.SortDescending)">
+                    Цена закупки @if (Model.SortColumn == "PurchasePrice")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SortColumn=SalePrice&SortDescending=@(!Model.SortDescending)">
+                    Цена продажи @if (Model.SortColumn == "SalePrice")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SortColumn=Quantity&SortDescending=@(!Model.SortDescending)">
+                    Количество @if (Model.SortColumn == "Quantity")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
         </tr>
     </thead>
     <tbody>
