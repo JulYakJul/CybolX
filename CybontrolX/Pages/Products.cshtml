@@ -1,0 +1,170 @@
+﻿@page
+@model CybontrolX.Pages.ProductsModel
+@{
+    ViewData["Title"] = "Товары";
+}
+
+<!-- Title and Add Product Button -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>@ViewData["Title"]</h1>
+    <a href="/CreateProduct" class="btn btn-primary">Добавить товар</a>
+</div>
+
+<!-- Search Form -->
+<div class="d-flex align-items-center mb-3">
+    <form method="get" class="d-flex align-items-center me-3">
+        <input type="text" name="SearchQuery" class="form-control-search me-2" placeholder="Поиск по названию" value="@Model.SearchQuery" />
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </form>
+</div>
+
+<!-- Action Buttons -->
+<div class="d-flex align-items-center mb-4">
+    <form method="post" asp-page-handler="DeleteProducts" class="d-flex align-items-center">
+        <button id="selectAllButton" type="button" class="btn btn-small btn-purple me-2">Выбрать все</button>
+        <button id="editButton" type="button" class="btn btn-small btn-purple me-2" disabled>Изменить</button>
+        <button id="deleteButton" type="submit" class="btn btn-small btn-danger" disabled>Удалить выбранные</button>
+    </form>
+</div>
+
+<!-- Table for Products -->
+<table class="table table-dark w-100">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">
+                <a href="?SearchQuery=@Model.SearchQuery&SortColumn=Name&SortDescending=@(!Model.SortDescending)">
+                    Название
+                    <img src="/Pages/Icons/sort.svg" class="sort-icon" />
+                    @if (Model.SortColumn == "Name")
+                    {
+                        <span class="sort-indicator">
+                            @if (Model.SortDescending)
+                            {
+                                <i class="fas fa-arrow-down"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-arrow-up"></i>
+                            }
+                        </span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SearchQuery=@Model.SearchQuery&SortColumn=PurchasePrice&SortDescending=@(!Model.SortDescending)">
+                    Цена закупки
+                    <img src="/Pages/Icons/sort.svg" class="sort-icon" />
+                    @if (Model.SortColumn == "PurchasePrice")
+                    {
+                        <span class="sort-indicator">
+                            @if (Model.SortDescending)
+                            {
+                                <i class="fas fa-arrow-down"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-arrow-up"></i>
+                            }
+                        </span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SearchQuery=@Model.SearchQuery&SortColumn=SalePrice&SortDescending=@(!Model.SortDescending)">
+                    Цена продажи
+                    <img src="/Pages/Icons/sort.svg" class="sort-icon" />
+                    @if (Model.SortColumn == "SalePrice")
+                    {
+                        <span class="sort-indicator">
+                            @if (Model.SortDescending)
+                            {
+                                <i class="fas fa-arrow-down"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-arrow-up"></i>
+                            }
+                        </span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SearchQuery=@Model.SearchQuery&SortColumn=Quantity&SortDescending=@(!Model.SortDescending)">
+                    Количество
+                    <img src="/Pages/Icons/sort.svg" class="sort-icon" />
+                    @if (Model.SortColumn == "Quantity")
+                    {
+                        <span class="sort-indicator">
+                            @if (Model.SortDescending)
+                            {
+                                <i class="fas fa-arrow-down"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-arrow-up"></i>
+                            }
+                        </span>
+                    }
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Products != null && Model.Products.Any())
+        {
+            @foreach (var product in Model.Products)
+            {
+                <tr data-id="@product.Id" class="table-row" onclick="selectRow(this)">
+                    <td><input type="checkbox" name="SelectedProductIds" value="@product.Id" /></td>
+                    <td>@product.Name</td>
+                    <td>@product.PurchasePrice</td>
+                    <td>@product.SalePrice</td>
+                    <td>@product.Quantity</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">Продукты не найдены</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function selectRow(row) {
+        var checkbox = row.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        row.classList.toggle('selected', checkbox.checked);
+
+        updateButtons();
+    }
+
+    function updateButtons() {
+        var selectedRows = document.querySelectorAll('.table-row .selected');
+        var deleteButton = document.getElementById('deleteButton');
+        var editButton = document.getElementById('editButton');
+
+        if (selectedRows.length > 0) {
+            deleteButton.disabled = false;
+            editButton.disabled = false;
+        } else {
+            deleteButton.disabled = true;
+            editButton.disabled = true;
+        }
+    }
+
+    document.getElementById('selectAllButton').addEventListener('click', function () {
+        var checkboxes = document.querySelectorAll('.table-row input[type="checkbox"]');
+        var allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = !allChecked;
+            checkbox.closest('tr').classList.toggle('selected', checkbox.checked);
+        });
+
+        updateButtons();
+    });
+</script>

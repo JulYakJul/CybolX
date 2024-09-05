@@ -1,0 +1,499 @@
+body {
+    margin: 0;
+    font-family: var(--bs-body-font-family);
+    font-size: 1.2rem;
+    font-weight: var(--bs-body-font-weight);
+    line-height: var(--bs-body-line-height);
+    color: var(--bs-body-color);
+    text-align: var(--bs-body-text-align);
+    background-color: var(--bs-body-bg);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.bg-main {
+    background-color: #1E1E1E;
+    color: #fff;
+}
+
+.bg-sidebar {
+    background-color: #292e34;
+}
+
+.navbar {
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 200px;
+    background-color: #212529;
+    color: #fff;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.navbar {
+    background-color: #212529;
+}
+
+.navbar-brand {
+    padding-top: .3125rem;
+    padding-bottom: .3125rem;
+    margin-right: 1rem;
+    font-size: 3.2rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+}
+
+    .navbar a:hover {
+        color: #0077cc;
+    }
+
+.navbar .nav-link.active,
+.navbar .nav-link.show {
+    color: #fff;
+    background-color: #0077cc;
+}
+
+.container-fluid {
+    margin-left: 200px;
+    padding: 20px;
+    color: #fff;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    background-color: #fff;
+    color: #1E1E1E;
+}
+
+    .footer a {
+        color: #1E1E1E;
+    }
+
+        .footer a:hover {
+            color: #0077cc;
+        }
+
+.navbar {
+    background-color: #212529;
+}
+
+    .navbar .nav-link {
+        color: #fff;
+    }
+
+        .navbar .nav-link:hover {
+            color: #0077cc;
+        }
+
+    .navbar .navbar-brand {
+        color: #7300FF;
+    }
+
+.navbar-light .navbar-nav .nav-link {
+    color: #fff;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #292e34;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.form-label {
+    font-size: 1.1rem;
+    color: #88959c;
+}
+
+.quantity-input {
+    width: 60px;
+    height: 37px;
+    text-align: center;
+    padding: .25rem;
+    border: 1px solid #292e34;
+    border-radius: .25rem;
+    background-color: #292e34;
+    color: #ffffff;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+    .input-group .btn-quantity {
+        background-color: #292e34;
+        border: 1px solid #7101fb;
+        color: #ffffff;
+        border-radius: .25rem;
+        font-size: 1.25rem;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 2px;
+    }
+
+        .input-group .btn-quantity:hover {
+            background-color: #002244;
+            border-color: #6000d5;
+        }
+
+/*.table {
+    --bs-table-bg: transparent;
+    --bs-table-accent-bg: transparent;
+    --bs-table-striped-color: #212529;
+    --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
+    --bs-table-active-color: #212529;
+    --bs-table-active-bg: rgba(0, 0, 0, 0.1);
+    --bs-table-hover-color: #212529;
+    --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #ffffff;
+    vertical-align: top;
+    border-color: #dee2e6;
+}*/
+
+.form-container {
+    max-width: 600px;
+    width: 100%;
+    background-color: #1E1E1E;
+    padding: 20px;
+    border-radius: .5rem;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #ffffff;
+    background-color: #292e34;
+    background-clip: padding-box;
+    border: 1px solid #292e34;
+    border-radius: .5rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+    .form-control:focus {
+        color: #ffffff;
+        background-color: #292e34;
+        border-color: #7101fb;
+        box-shadow: 0 0 0 .2rem rgba(0, 0, 0, .125);
+    }
+
+.btn-primary {
+    color: #ffffff;
+    background-color: #7101fb;
+    border-color: #7200ff;
+    border-radius: .3rem;
+    margin-top: 15px;
+}
+
+
+/*Карточка товаров*/
+.card {
+    border: none;
+    border-radius: .375rem;
+}
+
+.card-body {
+    font-size: 1rem; /* Размер шрифта для текста в карточке */
+}
+
+.product-info {
+    margin-bottom: 0.5rem; /* Отступ между строками информации */
+}
+
+.btn-sm {
+    font-size: 0.75rem; /* Размер шрифта для маленьких кнопок */
+    padding: 0.25rem 0.5rem; /* Внутренние отступы для кнопок */
+}
+
+.delete-icon {
+    width: 16px; /* Ширина иконки */
+    height: 16px; /* Высота иконки */
+    vertical-align: middle; /* Вертикальное выравнивание иконки */
+}
+
+
+
+
+.product-info {
+    flex: 1;
+    min-width: 150px;
+    margin-right: 1rem;
+    text-align: left;
+}
+
+    .product-info:last-child {
+        margin-right: 0;
+    }
+
+.d-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card.bg-dark {
+    background-color: #292e34;
+}
+
+.card-text {
+    color: #B0B0B0;
+}
+
+.btn-danger {
+    margin-top: 1rem;
+}
+
+.row {
+    margin: 0;
+}
+
+
+
+.notification-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #292e34;
+    color: #ffffff;
+    border: 2px solid #7101fb;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0;
+    width: 300px; /* Ширина панели */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+    .notification-panel.visible {
+        display: flex;
+        opacity: 1;
+    }
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.notification-text {
+    flex: 1;
+    font-size: 1rem; /* Размер шрифта текста */
+}
+
+.notification-close {
+    cursor: pointer;
+    font-size: 1.5rem;
+    margin-left: 1rem;
+}
+
+.notification-slider {
+    height: 5px;
+    background-color: #7101fb;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transition: width 0.5s linear; /* Плавное изменение ширины */
+}
+
+.text-danger {
+    --bs-text-opacity: 1;
+    color: rgb(118 111 181) !important;
+    font-size: 1rem;
+    margin-top: 0.1rem;
+    margin-bottom: 0;
+}
+
+/* Стили для контейнера таблицы */
+.table-container {
+    background-color: #f0f0f0; /* Серый фон для контейнера таблицы */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Стили для контейнера таблицы */
+.table-container {
+    background-color: #f0f0f0; /* Серый фон для контейнера таблицы */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Стили для контейнера таблицы */
+.table-container {
+    background-color: #f0f0f0; /* Серый фон для контейнера таблицы */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Стили для контейнера таблицы */
+.table-container {
+    background-color: #f0f0f0; /* Серый фон для контейнера таблицы */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Стили для контейнера таблицы */
+.table-container {
+    background-color: #f0f0f0; /* Серый фон для контейнера таблицы */
+    padding: 20px;
+    border-radius: 8px; /* Скругление углов контейнера */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень для контейнера */
+}
+
+/* Стили для контейнера таблицы */
+.table-container {
+    background-color: #f0f0f0; /* Серый фон для контейнера таблицы */
+    padding: 20px;
+    border-radius: 8px; /* Скругление углов контейнера */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень для контейнера */
+}
+
+/* Стили для таблицы */
+.table {
+    /*border-collapse: separate;*/
+    border-spacing: 0;
+    width: 100%;
+    border-radius: 8px; /* Скругление углов таблицы */
+    overflow: hidden; /* Обрезка содержимого для скругленных углов */
+}
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    .table thead th {
+        background-color: #2a343e;
+        color: #ffffff;
+        position: relative; /* Для позиционирования стрелочек сортировки */
+    }
+
+    .table tbody tr {
+        cursor: pointer;
+    }
+
+        .table tbody tr.selected {
+            background-color: #9a3535 !important; /* Светло-красный фон для выделенной строки */
+            color: #7101fb !important; /* Цвет текста для выделенной строки */
+        }
+
+        .table tbody tr:hover {
+            background-color: #495057;
+        }
+
+    .table td input[type="checkbox"] {
+        display: none; /* Скрываем чекбоксы, так как выделение происходит по строке */
+    }
+
+tbody, td, tfoot, th, thead, tr {
+    border-color: inherit;
+    border-style: none; 
+    border-width: 0;
+}
+
+/* Стили для индикаторов сортировки */
+.sort-indicator {
+    margin-left: 5px;
+    font-size: 0.8em;
+    color: #ffffff;
+}
+
+a {
+    color: #b3c4ff;
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+/* Таблица товаров */
+/* Стиль для формы поиска */
+.form-control-search {
+    flex: 1; /* Позволяет полю ввода занимать доступное пространство */
+    max-width: 400px; /* Устанавливает максимальную ширину поля ввода */
+    min-width: 200px; /* Устанавливает минимальную ширину поля ввода */
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #292e34;
+    border-radius: .25rem;
+}
+
+/* Общий стиль для кнопок, чтобы они выравнивались */
+.btn {
+    display: inline-flex; /* Обеспечивает выравнивание кнопок в одной строке */
+    align-items: center; /* Центрирует элементы внутри кнопки */
+    justify-content: center; /* Центрирует текст внутри кнопки */
+    height: 40px; /* Устанавливает одинаковую высоту для всех кнопок */
+}
+
+/* Фиолетовая кнопка */
+.btn-purple {
+    background-color: #7300FF; /* Фиолетовый цвет */
+    color: white;
+    border: none; /* Убираем обводку */
+}
+
+    .btn-purple:hover {
+        background-color: #5a32a3; /* Цвет при наведении */
+    }
+
+.btn-danger {
+    background-color: #dc3545; /* Красный цвет */
+    color: white;
+    border: none; /* Убираем обводку */
+}
+
+    .btn-danger:hover {
+        background-color: #c82333; /* Цвет при наведении */
+    }
+
+/* Уменьшенный размер кнопок */
+.btn-small {
+    padding: 0.25rem 0.5rem; /* Уменьшенные отступы */
+    font-size: 0.875rem; /* Уменьшенный размер шрифта */
+}
+
+/* Таблица занимает всю ширину страницы */
+.table {
+    width: 100%; /* Устанавливает таблицу на всю ширину */
+}
+
+/* Центрируем элементы внутри родителя */
+.d-flex.align-items-center {
+    align-items: center;
+    justify-content: flex-start; /* Выравниваем элементы слева */
+}
