@@ -1,0 +1,149 @@
+﻿@page
+@model CybontrolX.Pages.ClubStaffModel
+@{
+    ViewData["Title"] = "Сотрудники";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>@ViewData["Title"]</h1>
+    <a href="/CreateEmployee" class="btn btn-primary">Добавить сотрудника</a>
+</div>
+
+<div class="d-flex align-items-center mb-3">
+    <form method="get" class="d-flex align-items-center me-3">
+        <input type="text" name="SearchQuery" class="form-control-search me-2" placeholder="Поиск по имени" value="@Model.SearchQuery" />
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </form>
+</div>
+
+<form id="deleteForm" method="post" asp-page-handler="DeleteEmployees" class="d-flex align-items-center mb-4">
+    <input type="hidden" id="SelectedEmployeeIds" name="SelectedEmployeeIds" />
+    <button id="selectAllButton" type="button" class="btn btn-small btn-purple me-2">Выбрать все</button>
+    <button id="editButton" type="button" class="btn btn-small btn-purple me-2" onclick="editEmployee()">Редактировать</button>
+
+    <script>
+        function editEmployee() {
+            var selectedRow = document.querySelector('.table-row.selected');
+            if (selectedRow) {
+                var employeeId = selectedRow.getAttribute('data-id');
+                window.location.href = '/EditEmployee?id=' + employeeId;
+            }
+        }
+    </script>
+    <button id="deleteButton" type="submit" class="btn btn-small btn-danger" disabled>Удалить</button>
+</form>
+
+<table class="table table-dark w-100">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">
+                <a href="?SortColumn=FullName&SortDescending=@(!Model.SortDescending)">
+                    ФИО @if (Model.SortColumn == "FullName")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SortColumn=PhoneNumber&SortDescending=@(!Model.SortDescending)">
+                    Телефон @if (Model.SortColumn == "PhoneNumber")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SortColumn=Status&SortDescending=@(!Model.SortDescending)">
+                    Статус @if (Model.SortColumn == "Status")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SortColumn=Role&SortDescending=@(!Model.SortDescending)">
+                    Роль @if (Model.SortColumn == "Role")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Employees != null && Model.Employees.Any())
+        {
+            @foreach (var employee in Model.Employees)
+            {
+                <tr data-id="@employee.Id" class="table-row" onclick="selectRow(this)">
+                    <td><input type="checkbox" name="SelectedEmployeeIds" value="@employee.Id" /></td>
+                    <td>@employee.FullName</td>
+                    <td>@employee.PhoneNumber</td>
+                    <td>@employee.Status</td>
+                    <td>@employee.Role</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">Сотрудники не найдены</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function selectRow(row) {
+        var checkbox = row.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        row.classList.toggle('selected', checkbox.checked);
+
+        updateButtons();
+    }
+
+    function updateButtons() {
+        var selectedCheckboxes = document.querySelectorAll('.table-row input[type="checkbox"]:checked');
+        var deleteButton = document.getElementById('deleteButton');
+        var editButton = document.getElementById('editButton');
+
+        if (selectedCheckboxes.length === 1) {
+            editButton.disabled = false;
+        } else {
+            editButton.disabled = true;
+        }
+
+        if (selectedCheckboxes.length > 0) {
+            deleteButton.disabled = false;
+        } else {
+            deleteButton.disabled = true;
+        }
+    }
+
+    document.getElementById('selectAllButton').addEventListener('click', function () {
+        var checkboxes = document.querySelectorAll('.table-row input[type="checkbox"]');
+        var allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = !allChecked;
+            checkbox.closest('tr').classList.toggle('selected', checkbox.checked);
+        });
+
+        updateButtons();
+    });
+
+    document.getElementById('editButton').addEventListener('click', function () {
+        var selectedRow = document.querySelector('.table-row.selected');
+        if (selectedRow) {
+            var employeeId = selectedRow.getAttribute('data-id');
+            window.location.href = '/EditEmployee?id=' + employeeId;
+        }
+    });
+
+    document.getElementById('deleteForm').addEventListener('submit', function () {
+        const selectedIds = Array.from(document.querySelectorAll('.table-row input[type="checkbox"]:checked'))
+            .map(checkbox => checkbox.value);
+        document.getElementById('SelectedEmployeeIds').value = selectedIds.join(',');
+    });
+</script>

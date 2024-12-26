@@ -1,0 +1,40 @@
+﻿@page
+@model CybontrolX.Pages.DutyCalendarModel
+@{
+    ViewData["Title"] = "Расписание тренировок";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>График дежурств</h1>
+
+<div class="d-flex align-items-center mb-3">
+    <form method="get" class="d-flex align-items-center me-3">
+        <input type="text" name="SearchQuery" class="form-control-search me-2" placeholder="Поиск сотрудника" value="@Model.SearchQuery" />
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </form>
+</div>
+
+
+<div class="d-flex flex-column gap-2 mt-4">
+    <div id="calendar"></div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/popper.js@1"></script>
+    <script src="https://unpkg.com/tippy.js@5"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var events = [];
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'ru',
+                events: events,
+            });
+
+            calendar.render();
+        });
+    </script>
+}

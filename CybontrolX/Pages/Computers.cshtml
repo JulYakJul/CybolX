@@ -1,0 +1,145 @@
+﻿@page
+@model CybontrolX.Pages.ComputersModel
+@{
+    ViewData["Title"] = "Компьютеры";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>@ViewData["Title"]</h1>
+    <a href="/CreateComputer" class="btn btn-primary">Добавить компьютер</a>
+</div>
+
+<div class="d-flex align-items-center mb-3">
+    <form method="get" class="d-flex align-items-center me-3">
+        <input type="text" name="SearchQuery" class="form-control-search me-2" placeholder="Поиск по IP" value="@Model.SearchQuery" />
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </form>
+</div>
+
+<form id="deleteForm" method="post" asp-page-handler="DeleteComputers" class="d-flex align-items-center mb-4">
+    <input type="hidden" id="SelectedComputerIds" name="SelectedComputerIds" />
+    <button id="selectAllButton" type="button" class="btn btn-small btn-purple me-2">Выбрать все</button>
+    <button id="editButton" type="button" class="btn btn-small btn-purple me-2" disabled>Изменить</button>
+    <button id="deleteButton" type="submit" class="btn btn-small btn-danger" disabled>Удалить</button>
+</form>
+
+<table class="table table-dark w-100">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">
+                <a href="?SortColumn=ComputerIP&SortDescending=@(!Model.SortDescending)">
+                    IP Компьютера @if (Model.SortColumn == "ComputerIP")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SortColumn=Status&SortDescending=@(!Model.SortDescending)">
+                    Статус @if (Model.SortColumn == "Status")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SortColumn=SessionStartTime&SortDescending=@(!Model.SortDescending)">
+                    Время начала сессии @if (Model.SortColumn == "SessionStartTime")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
+            <th scope="col">
+                <a href="?SortColumn=SessionEndTime&SortDescending=@(!Model.SortDescending)">
+                    Время конца сессии @if (Model.SortColumn == "SessionEndTime")
+                    {
+                        <span>@(Model.SortDescending ? "▼" : "▲")</span>
+                    }
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Computers != null && Model.Computers.Any())
+        {
+            @foreach (var computer in Model.Computers)
+            {
+                <tr data-id="@computer.Id" class="table-row" onclick="selectRow(this)">
+                    <td><input type="checkbox" name="SelectedComputerIds" value="@computer.Id" /></td>
+                    <td>@computer.ComputerIP</td>
+                    <td>@(computer.Status ? "Активная" : "Неактивная")</td>
+                    <td>@computer.SessionStartTime?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@computer.SessionEndTime?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">Компьютеры не найдены</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function selectRow(row) {
+        var checkbox = row.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        row.classList.toggle('selected', checkbox.checked);
+
+        updateButtons();
+    }
+
+    function updateButtons() {
+        var selectedCheckboxes = document.querySelectorAll('.table-row input[type="checkbox"]:checked');
+        var deleteButton = document.getElementById('deleteButton');
+        var editButton = document.getElementById('editButton');
+
+        if (selectedCheckboxes.length === 1) {
+            editButton.disabled = false;
+        } else {
+            editButton.disabled = true;
+        }
+
+        if (selectedCheckboxes.length > 0) {
+            deleteButton.disabled = false;
+        } else {
+            deleteButton.disabled = true;
+        }
+    }
+
+    document.getElementById('selectAllButton').addEventListener('click', function () {
+        var checkboxes = document.querySelectorAll('.table-row input[type="checkbox"]');
+        var allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = !allChecked;
+            checkbox.closest('tr').classList.toggle('selected', checkbox.checked);
+        });
+
+        updateButtons();
+    });
+</script>
+
+<script>
+    function updateSelectedComputerIds() {
+        var selectedCheckboxes = document.querySelectorAll('.table-row input[type="checkbox"]:checked');
+        var selectedComputerIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+        document.getElementById('SelectedComputerIds').value = selectedComputerIds.join(',');
+    }
+
+    document.getElementById('deleteForm').addEventListener('submit', function () {
+        updateSelectedComputerIds();
+    });
+
+    document.getElementById('editButton').addEventListener('click', function () {
+        var selectedCheckbox = document.querySelector('.table-row input[type="checkbox"]:checked');
+        if (selectedCheckbox) {
+            var computerId = selectedCheckbox.value;
+            window.location.href = '/EditComputer?id=' + computerId;
+        }
+    });
+</script>
