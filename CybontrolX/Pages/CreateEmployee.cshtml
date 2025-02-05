@@ -17,9 +17,21 @@
         <h2>Добавить сотрудника</h2>
         <form method="post" asp-page-handler="AddEmployee" onsubmit="showNotification(event)">
             <div class="form-group mb-3">
-                <label asp-for="NewEmployee.FullName" class="form-label">ФИО сотрудника</label>
-                <input asp-for="NewEmployee.FullName" class="form-control" />
-                <span asp-validation-for="NewEmployee.FullName" class="text-danger"></span>
+                <label asp-for="NewEmployee.Name" class="form-label">Имя</label>
+                <input asp-for="NewEmployee.Name" class="form-control" />
+                <span asp-validation-for="NewEmployee.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="NewEmployee.Surname" class="form-label">Фамилия</label>
+                <input asp-for="NewEmployee.Surname" class="form-control" />
+                <span asp-validation-for="NewEmployee.Surname" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="NewEmployee.Patronymic" class="form-label">Отчество</label>
+                <input asp-for="NewEmployee.Patronymic" class="form-control" />
+                <span asp-validation-for="NewEmployee.Patronymic" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
@@ -53,7 +65,7 @@
                     <option value="">Не выбрано</option>
                     @foreach (var schedule in Model.DutySchedules)
                     {
-                        <option value="@schedule.Id">@schedule.DutyDates</option>
+                        <option value="@schedule.Id">@schedule.DutyDate.ToShortDateString()</option>
                     }
                 </select>
                 <span asp-validation-for="NewEmployee.DutyScheduleId" class="text-danger"></span>

@@ -1,17 +1,39 @@
-﻿@* @page
+﻿@page
 @model CybontrolX.Pages.EditEmployeeModel
 @{
     ViewData["Title"] = "Редактировать сотрудника";
 }
 
+<div id="notificationPanel" class="notification-panel">
+    <div class="notification-content">
+        <span class="notification-text">@Model.NotificationMessage</span>
+        <span class="notification-close" onclick="closeNotification()">&times;</span>
+    </div>
+    <div class="notification-slider"></div>
+</div>
+
 <div class="d-flex justify-content-center align-items-center" style="min-height: 70vh;">
     <div class="form-container mb-5" style="width: 100%; max-width: 500px;">
         <h2>Редактировать сотрудника</h2>
-        <form method="post" onsubmit="showNotification(event)">
+        <form method="post" asp-page-handler="EditEmployee" onsubmit="showNotification(event)">
+            <input type="hidden" asp-for="Employee.Id" />
+
             <div class="form-group mb-3">
-                <label asp-for="Employee.FullName" class="form-label">ФИО сотрудника</label>
-                <input asp-for="Employee.FullName" class="form-control" />
-                <span asp-validation-for="Employee.FullName" class="text-danger"></span>
+                <label asp-for="Employee.Name" class="form-label">ФИО сотрудника</label>
+                <input asp-for="Employee.Name" class="form-control" />
+                <span asp-validation-for="Employee.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Employee.Surname" class="form-label">ФИО сотрудника</label>
+                <input asp-for="Employee.Surname" class="form-control" />
+                <span asp-validation-for="Employee.Surname" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Employee.Patronymic" class="form-label">ФИО сотрудника</label>
+                <input asp-for="Employee.Patronymic" class="form-control" />
+                <span asp-validation-for="Employee.Patronymic" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
@@ -21,19 +43,19 @@
             </div>
 
             <div class="form-group mb-3">
-    <label asp-for="Employee.Status" class="form-label">Статус</label>
-    <select asp-for="Employee.Status" class="form-control">
-        <option value="работает" @(Model.Employee.Status == "работает" ? "selected" : "")>Работает</option>
-        <option value="не работает" @(Model.Employee.Status == "не работает" ? "selected" : "")>Не работает</option>
-    </select>
-    <span asp-validation-for="Employee.Status" class="text-danger"></span>
-</div>
+                <label asp-for="Employee.Status" class="form-label">Статус</label>
+                <select asp-for="Employee.Status" class="form-control">
+                    <option value="работает">Работает</option>
+                    <option value="не работает">Не работает</option>
+                </select>
+                <span asp-validation-for="Employee.Status" class="text-danger"></span>
+            </div>
 
             <div class="form-group mb-3">
                 <label asp-for="Employee.Role" class="form-label">Роль</label>
                 <select asp-for="Employee.Role" class="form-control">
-                    <option value="управляющий" selected="@((Model.Employee.Role == "управляющий") ? "selected" : "")">Управляющий</option>
-                    <option value="администратор" selected="@((Model.Employee.Role == "администратор") ? "selected" : "")">Администратор</option>
+                    <option value="управляющий">Управляющий</option>
+                    <option value="администратор">Администратор</option>
                 </select>
                 <span asp-validation-for="Employee.Role" class="text-danger"></span>
             </div>
@@ -44,27 +66,25 @@
                     <option value="">Не выбрано</option>
                     @foreach (var schedule in Model.DutySchedules)
                     {
-                        <option value="@schedule.Id" selected="@((Model.Employee.DutyScheduleId == schedule.Id) ? "selected" : "")">@schedule.DutyDates</option>
+                        <option value="@schedule.Id">@schedule.DutyDate.ToShortDateString()</option>
                     }
                 </select>
                 <span asp-validation-for="Employee.DutyScheduleId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3" id="shiftStartField" style="display: none;">
+                <label asp-for="Employee.ShiftStart" class="form-label">Начало смены</label>
+                <input asp-for="Employee.ShiftStart" class="form-control" type="datetime-local" />
+                <span asp-validation-for="Employee.ShiftStart" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3" id="shiftEndField" style="display: none;">
+                <label asp-for="Employee.ShiftEnd" class="form-label">Конец смены</label>
+                <input asp-for="Employee.ShiftEnd" class="form-control" type="datetime-local" />
+                <span asp-validation-for="Employee.ShiftEnd" class="text-danger"></span>
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Сохранить изменения</button>
         </form>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        function showNotification(event) {
-            event.preventDefault();
-            localStorage.setItem('notificationShown', 'true');
-            displayNotification();
-            setTimeout(function () {
-                document.querySelector('form').submit();
-            }, 500);
-        }
-    </script>
-}
- *@

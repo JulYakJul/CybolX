@@ -38,19 +38,44 @@ namespace CybontrolX.Pages
 
             if (!string.IsNullOrWhiteSpace(SearchQuery))
             {
-                query = query.Where(e => e.FullName.Contains(SearchQuery));
+                query = query.Where(e => e.Surname.Contains(SearchQuery));
             }
+
+            var today = DateTime.UtcNow.Date;
+
+            var dutySchedulesToday = await _context.DutySchedules
+                .Where(ds => ds.DutyDate.Date == today)
+                .ToListAsync();
+
+            var employees = await query.ToListAsync();
+
+            foreach (var employee in employees)
+            {
+                var employeeDutySchedule = dutySchedulesToday
+                    .FirstOrDefault(ds => ds.EmployeeId == employee.Id);
+
+                if (employeeDutySchedule != null)
+                {
+                    employee.Status = "Работает";
+                }
+                else
+                {
+                    employee.Status = "Не работает";
+                }
+            }
+
+            Employees = employees;
 
             query = SortColumn switch
             {
-                "FullName" => SortDescending ? query.OrderByDescending(e => e.FullName) : query.OrderBy(e => e.FullName),
+                "Name" => SortDescending ? query.OrderByDescending(e => e.Name) : query.OrderBy(e => e.Name),
+                "Surname" => SortDescending ? query.OrderByDescending(e => e.Surname) : query.OrderBy(e => e.Surname),
+                "Patronymic" => SortDescending ? query.OrderByDescending(e => e.Patronymic) : query.OrderBy(e => e.Patronymic),
                 "PhoneNumber" => SortDescending ? query.OrderByDescending(e => e.PhoneNumber) : query.OrderBy(e => e.PhoneNumber),
                 "Status" => SortDescending ? query.OrderByDescending(e => e.Status) : query.OrderBy(e => e.Status),
                 "Role" => SortDescending ? query.OrderByDescending(e => e.Role) : query.OrderBy(e => e.Role),
-                _ => query.OrderBy(e => e.FullName),
+                _ => query.OrderBy(e => e.Surname),
             };
-
-            Employees = await query.ToListAsync();
         }
 
         public async Task<IActionResult> OnPostDeleteEmployeesAsync()
@@ -76,6 +101,5 @@ namespace CybontrolX.Pages
 
             return RedirectToPage();
         }
-
     }
 }

@@ -1,37 +1,39 @@
 ﻿@page
 @model CybontrolX.Pages.DutyCalendarModel
 @{
-    ViewData["Title"] = "Расписание тренировок";
-    Layout = "~/Pages/Shared/_Layout.cshtml";
+    ViewData["Title"] = "График дежурств";
 }
+
+<!-- Подключите стили FullCalendar -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
 
 <h1>График дежурств</h1>
 
-<div class="d-flex align-items-center mb-3">
-    <form method="get" class="d-flex align-items-center me-3">
-        <input type="text" name="SearchQuery" class="form-control-search me-2" placeholder="Поиск сотрудника" value="@Model.SearchQuery" />
-        <button type="submit" class="btn btn-primary">Поиск</button>
-    </form>
+<div class="d-flex justify-content-between mb-3">
+    <a href="/CreateDutyCalendar" class="btn btn-primary">Создать график</a>
 </div>
 
-
-<div class="d-flex flex-column gap-2 mt-4">
-    <div id="calendar"></div>
-</div>
+<div id="calendar"></div>
 
 @section Scripts {
-    <script src="https://unpkg.com/popper.js@1"></script>
-    <script src="https://unpkg.com/tippy.js@5"></script>
+    <!-- Подключаем FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
 
-            var events = [];
+            // Вывод JSON-событий в консоль для отладки
+            console.log(@Html.Raw(Model.EventsJson));
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'ru',
-                events: events,
+                events: @Html.Raw(Model.EventsJson),
+                eventTimeFormat: { // Формат отображения времени (если понадобится)
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    meridiem: false
+                }
             });
 
             calendar.render();

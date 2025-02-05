@@ -1,0 +1,52 @@
+﻿@page
+@model CybontrolX.Pages.CreateDutyCalendarModel
+@{
+    ViewData["Title"] = "Создание графика дежурств";
+}
+
+<h1>Создание графика дежурств</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="EmployeeId" class="form-label">Выберите сотрудника:</label>
+        <select asp-for="EmployeeId" class="form-control" required asp-items="@(new SelectList(Model.Employees, "Id", "Surname"))">
+            <option value="">Выберите сотрудника</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Выберите даты и время дежурств:</label>
+        <input type="text" id="dutyDates" name="DutyDates" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="ShiftStart" class="form-label">Начало смены:</label>
+        <input type="time" asp-for="ShiftStart" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="ShiftEnd" class="form-label">Конец смены:</label>
+        <input type="time" asp-for="ShiftEnd" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Создать график</button>
+</form>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr("#dutyDates", {
+                mode: "multiple",        // Выбор нескольких дат
+                dateFormat: "Y-m-d",       // Формат даты
+                locale: "ru",              // Русская локализация
+                minDate: "today",          // Запрет на выбор прошедших дат
+                allowInput: true,          // Разрешить ввод вручную
+                defaultDate: []            // Можно передать список выбранных дат
+            });
+        });
+    </script>
+}

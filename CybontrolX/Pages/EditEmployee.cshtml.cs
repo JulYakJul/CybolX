@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using CybontrolX.DataBase;
-using CybontrolX.DBModels;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using CybontrolX.DataBase;
+using CybontrolX.DBModels;
+using System.Collections.Generic;
 
 namespace CybontrolX.Pages
 {
@@ -16,18 +17,14 @@ namespace CybontrolX.Pages
             _context = context;
         }
 
+        [BindProperty]
         public Employee Employee { get; set; }
         public IList<DutySchedule> DutySchedules { get; set; }
-
-        [BindProperty]
-        public Employee EmployeeToUpdate { get; set; }
+        public string NotificationMessage { get; private set; } = string.Empty;
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Employee = await _context.Employee
-                                      .Include(e => e.DutySchedule)
-                                      .FirstOrDefaultAsync(e => e.Id == id);
-
+            Employee = await _context.Employee.FindAsync(id);
             if (Employee == null)
             {
                 return NotFound();
@@ -37,47 +34,39 @@ namespace CybontrolX.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostEditEmployeeAsync()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            var employee = await _context.Employee.FindAsync(EmployeeToUpdate.Id);
-            if (employee == null)
+            var employeeInDb = await _context.Employee.FindAsync(Employee.Id);
+            if (employeeInDb == null)
             {
                 return NotFound();
             }
 
-            employee.FullName = EmployeeToUpdate.FullName;
-            employee.PhoneNumber = EmployeeToUpdate.PhoneNumber;
-            employee.Status = EmployeeToUpdate.Status;
-            employee.Role = EmployeeToUpdate.Role;
-            employee.DutyScheduleId = EmployeeToUpdate.DutyScheduleId;
+            employeeInDb.Name = Employee.Name;
+            employeeInDb.Surname = Employee.Surname;
+            employeeInDb.Patronymic = Employee.Patronymic;
+            employeeInDb.PhoneNumber = Employee.PhoneNumber;
+            employeeInDb.Status = Employee.Status;
+            employeeInDb.Role = Employee.Role;
+            employeeInDb.DutyScheduleId = Employee.DutyScheduleId;
+            employeeInDb.ShiftStart = Employee.ShiftStart;
+            employeeInDb.ShiftEnd = Employee.ShiftEnd;
 
             try
             {
                 await _context.SaveChangesAsync();
+                return RedirectToPage("ClubStaff");
             }
-            catch (DbUpdateConcurrencyException)
+            catch
             {
-                if (!EmployeeExists(EmployeeToUpdate.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                NotificationMessage = "Ошибка: Не удалось сохранить изменения.";
+                return Page();
             }
-
-            return RedirectToPage("/ClubStaff");
-        }
-
-        private bool EmployeeExists(int id)
-        {
-            return _context.Employee.Any(e => e.Id == id);
         }
     }
 }

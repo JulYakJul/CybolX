@@ -4,7 +4,10 @@
     {
         public int Id { get; set; }
         public int EmployeeId { get; set; }
-        public string DutyDates { get; set; } // JSON с датами дежурств
+        public DateTime DutyDate { get; set; }
+
+        public TimeSpan ShiftStart { get; set; }
+        public TimeSpan ShiftEnd { get; set; }
 
         public Employee Employee { get; set; }
     }
