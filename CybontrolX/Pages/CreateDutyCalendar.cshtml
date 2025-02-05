@@ -15,6 +15,16 @@
     </div>
 
     <div class="mb-3">
+        <label for="ShiftType" class="form-label">Тип смены:</label>
+        <select asp-for="ShiftType" class="form-control" required>
+            <option value="">Выберите тип смены</option>
+            <option value="Дневная">Дневная</option>
+            <option value="Ночная">Ночная</option>
+            <option value="Другое">Другое</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
         <label class="form-label">Выберите даты и время дежурств:</label>
         <input type="text" id="dutyDates" name="DutyDates" class="form-control" required />
     </div>

@@ -31,32 +31,36 @@ namespace CybontrolX.Pages
 
         [BindProperty]
         public TimeSpan ShiftEnd { get; set; }
+        public string ShiftType { get; set; }
 
         public List<Employee> Employees { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int employeeId)
+        public async Task<IActionResult> OnGetAsync(int employeeId, string shiftType)
         {
             Employees = await _context.Employee.ToListAsync();
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                // Загружаем график дежурств выбранного сотрудника
-                var dutySchedules = await _context.DutySchedules
-                    .Where(ds => ds.EmployeeId == employeeId)
-                    .ToListAsync();
+                var query = _context.DutySchedules
+                    .Where(ds => ds.EmployeeId == employeeId);
 
-                // Преобразуем даты в строку
+                if (!string.IsNullOrEmpty(shiftType))
+                {
+                    query = query.Where(ds => ds.ShiftType == shiftType);
+                }
+
+                var dutySchedules = await query.ToListAsync();
+
                 var dutyDates = string.Join(",", dutySchedules.Select(ds => ds.DutyDate.ToString("yyyy-MM-dd")));
 
                 return new JsonResult(new { dutyDates });
             }
 
-            // Загружаем график дежурств выбранного сотрудника
+            // Остальной код для обычной загрузки страницы
             var dutySchedulesForPage = await _context.DutySchedules
                 .Where(ds => ds.EmployeeId == employeeId)
                 .ToListAsync();
 
-            // Преобразуем даты в строку
             DutyDates = string.Join(",", dutySchedulesForPage.Select(ds => ds.DutyDate.ToString("yyyy-MM-dd")));
 
             var firstSchedule = dutySchedulesForPage.FirstOrDefault();
@@ -84,7 +88,6 @@ namespace CybontrolX.Pages
             _context.DutySchedules.RemoveRange(existingSchedules);
             await _context.SaveChangesAsync();
 
-            // Добавляем новые записи дежурств
             var dates = DutyDates.Split(',') // Получаем список дат
                 .Select(d => DateTime.SpecifyKind(
                     DateTime.ParseExact(d.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture),
@@ -96,7 +99,8 @@ namespace CybontrolX.Pages
                 EmployeeId = EmployeeId,
                 DutyDate = date,
                 ShiftStart = ShiftStart,
-                ShiftEnd = ShiftEnd
+                ShiftEnd = ShiftEnd,
+                ShiftType = ShiftType // Добавляем тип смены
             });
 
             _context.DutySchedules.AddRange(schedules);

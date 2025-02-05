@@ -15,6 +15,16 @@
     </div>
 
     <div class="mb-3">
+        <label for="ShiftType" class="form-label">Тип смены:</label>
+        <select asp-for="ShiftType" id="ShiftType" class="form-control" required>
+            <option value="">Выберите тип смены</option>
+            <option value="Дневная">Дневная</option>
+            <option value="Ночная">Ночная</option>
+            <option value="Другое">Другое</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
         <label class="form-label">Выберите даты и время дежурств:</label>
         <input type="text" id="dutyDates" name="DutyDates" class="form-control" value="@Model.DutyDates" required />
     </div>
@@ -38,42 +48,47 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Инициализация flatpickr
-            flatpickr("#dutyDates", {
-                mode: "multiple",        // Выбор нескольких дат
-                dateFormat: "Y-m-d",       // Формат даты
-                locale: "ru",              // Русская локализация
-                minDate: "today",          // Запрет на выбор прошедших дат
-                allowInput: true,          // Разрешить ввод вручную
-                defaultDate: @Html.Raw(Json.Serialize(Model.DutyDates.Split(','))) // Преобразуем даты в JSON формат
-            });
+                        document.addEventListener('DOMContentLoaded', function () {
+            initializeFlatpickr();
         });
+
+        function initializeFlatpickr(dates = []) {
+            flatpickr("#dutyDates", {
+                mode: "multiple",
+                dateFormat: "Y-m-d",
+                locale: "ru",
+                minDate: "today",
+                allowInput: true,
+                defaultDate: dates
+            });
+        }
 
         function updateDutyDates() {
             var employeeId = document.getElementById('EmployeeId').value;
+            var shiftType = document.getElementById('ShiftType').value;
 
-            // Отправляем AJAX-запрос для получения дежурств сотрудника
             if (employeeId) {
-                fetch(`/EditDutyCalendar?employeeId=${employeeId}`, {
+                fetch(`/EditDutyCalendar?employeeId=${employeeId}&shiftType=${shiftType}`, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        // Обновляем поле "Выберите даты и время дежурств"
-                        flatpickr("#dutyDates", {
-                            mode: "multiple",
-                            dateFormat: "Y-m-d",
-                            locale: "ru",
-                            minDate: "today",
-                            allowInput: true,
-                            defaultDate: data.dutyDates.split(',') // Даты, полученные с сервера
-                        });
-                    })
-                    .catch(error => console.error('Error fetching duty dates:', error));
+                .then(response => response.json())
+                .then(data => {
+                    let flatpickrInstance = flatpickr("#dutyDates");
+                    if (flatpickrInstance) {
+                        flatpickrInstance.destroy();
+                    }
+
+                    initializeFlatpickr(data.dutyDates.split(','));
+                })
+                .catch(error => {
+                    console.error('Error fetching duty dates:', error);
+                    alert('Произошла ошибка при загрузке данных. Пожалуйста, попробуйте еще раз.');
+                });
             }
         }
+
+        document.getElementById('ShiftType').addEventListener('change', updateDutyDates);
     </script>
 }

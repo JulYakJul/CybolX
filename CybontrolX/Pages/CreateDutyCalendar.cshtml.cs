@@ -32,6 +32,9 @@ namespace CybontrolX.Pages
         [BindProperty]
         public TimeSpan ShiftEnd { get; set; }
 
+        [BindProperty]
+        public string ShiftType { get; set; }  // Добавлено свойство для типа смены
+
         public List<Employee> Employees { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
@@ -45,10 +48,10 @@ namespace CybontrolX.Pages
         {
             if (EmployeeId == 0)
             {
-                ModelState.AddModelError("EmployeeId", "Сотрудник не выбран.");
+                ModelState.AddModelError("EmployeeId", "Сотрудник не выбран");
             }
 
-            var dates = DutyDates.Split(',')
+            var dates = DutyDates.Split(',')  // Преобразуем строки в даты
                 .Select(d => DateTime.SpecifyKind(
                     DateTime.ParseExact(d.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture),
                     DateTimeKind.Utc))
@@ -65,7 +68,8 @@ namespace CybontrolX.Pages
                         EmployeeId = EmployeeId,
                         DutyDate = date,
                         ShiftStart = ShiftStart,
-                        ShiftEnd = TimeSpan.FromHours(23) + TimeSpan.FromMinutes(59) + TimeSpan.FromSeconds(59)
+                        ShiftEnd = TimeSpan.FromHours(23) + TimeSpan.FromMinutes(59) + TimeSpan.FromSeconds(59),
+                        ShiftType = ShiftType  // Сохраняем тип смены
                     });
 
                     schedules.Add(new DutySchedule
@@ -73,7 +77,8 @@ namespace CybontrolX.Pages
                         EmployeeId = EmployeeId,
                         DutyDate = date.AddDays(1),
                         ShiftStart = TimeSpan.Zero,
-                        ShiftEnd = ShiftEnd
+                        ShiftEnd = ShiftEnd,
+                        ShiftType = ShiftType  // Сохраняем тип смены
                     });
                 }
                 else
@@ -83,7 +88,8 @@ namespace CybontrolX.Pages
                         EmployeeId = EmployeeId,
                         DutyDate = date,
                         ShiftStart = ShiftStart,
-                        ShiftEnd = ShiftEnd
+                        ShiftEnd = ShiftEnd,
+                        ShiftType = ShiftType  // Сохраняем тип смены
                     });
                 }
             }
