@@ -8,7 +8,7 @@
         public string Patronymic { get; set; }
         public string PhoneNumber { get; set; }
         public int? DutyScheduleId { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
         public TimeSpan? ShiftStart { get; set; }
         public TimeSpan? ShiftEnd { get; set; }
         public string Role { get; set; }

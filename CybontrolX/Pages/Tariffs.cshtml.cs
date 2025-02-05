@@ -1,12 +1,23 @@
-using Microsoft.AspNetCore.Mvc;
+using CybontrolX.DataBase;
+using CybontrolX.DBModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace CybontrolX.Pages
+public class TariffsModel : PageModel
 {
-    public class TariffsModel : PageModel
+    private readonly AppDbContext _context;
+
+    public TariffsModel(AppDbContext context)
     {
-        public void OnGet()
-        {
-        }
+        _context = context;
+    }
+
+    public List<Tariff> Tariffs { get; set; } = new List<Tariff>();
+
+    public async Task OnGetAsync()
+    {
+        Tariffs = await _context.Tariffs.ToListAsync();
     }
 }

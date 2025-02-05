@@ -40,14 +40,14 @@
                 <span asp-validation-for="NewEmployee.PhoneNumber" class="text-danger"></span>
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="NewEmployee.Status" class="form-label">Статус</label>
-                <select asp-for="NewEmployee.Status" class="form-control">
-                    <option value="работает">Работает</option>
-                    <option value="не работает">Не работает</option>
-                </select>
-                <span asp-validation-for="NewEmployee.Status" class="text-danger"></span>
-            </div>
+            @* <div class="form-group mb-3"> *@
+            @*     <label asp-for="NewEmployee.Status" class="form-label">Статус</label> *@
+            @*     <select asp-for="NewEmployee.Status" class="form-control"> *@
+            @*         <option value="работает">Работает</option> *@
+            @*         <option value="не работает">Не работает</option> *@
+            @*     </select> *@
+            @*     <span asp-validation-for="NewEmployee.Status" class="text-danger"></span> *@
+            @* </div> *@
 
             <div class="form-group mb-3">
                 <label asp-for="NewEmployee.Role" class="form-label">Роль</label>
@@ -59,31 +59,31 @@
             </div>
 
             <!-- DutySchedule -->
-            <div class="form-group mb-3">
-                <label asp-for="NewEmployee.DutyScheduleId" class="form-label">Расписание</label>
-                <select asp-for="NewEmployee.DutyScheduleId" class="form-control">
-                    <option value="">Не выбрано</option>
-                    @foreach (var schedule in Model.DutySchedules)
-                    {
-                        <option value="@schedule.Id">@schedule.DutyDate.ToShortDateString()</option>
-                    }
-                </select>
-                <span asp-validation-for="NewEmployee.DutyScheduleId" class="text-danger"></span>
-            </div>
+            @* <div class="form-group mb-3"> *@
+            @*     <label asp-for="NewEmployee.DutyScheduleId" class="form-label">Расписание</label> *@
+            @*     <select asp-for="NewEmployee.DutyScheduleId" class="form-control"> *@
+            @*         <option value="">Не выбрано</option> *@
+            @*         @foreach (var schedule in Model.DutySchedules) *@
+            @*         { *@
+            @*             <option value="@schedule.Id">@schedule.DutyDate.ToShortDateString()</option> *@
+            @*         } *@
+            @*     </select> *@
+            @*     <span asp-validation-for="NewEmployee.DutyScheduleId" class="text-danger"></span> *@
+            @* </div> *@
 
             <!-- ShiftStart (отображать только если выбран DutySchedule) -->
-            <div class="form-group mb-3" id="shiftStartField" style="display: none;">
-                <label asp-for="NewEmployee.ShiftStart" class="form-label">Начало смены</label>
-                <input asp-for="NewEmployee.ShiftStart" class="form-control" type="datetime-local" />
-                <span asp-validation-for="NewEmployee.ShiftStart" class="text-danger"></span>
-            </div>
+            @* <div class="form-group mb-3" id="shiftStartField" style="display: none;"> *@
+            @*     <label asp-for="NewEmployee.ShiftStart" class="form-label">Начало смены</label> *@
+            @*     <input asp-for="NewEmployee.ShiftStart" class="form-control" type="datetime-local" /> *@
+            @*     <span asp-validation-for="NewEmployee.ShiftStart" class="text-danger"></span> *@
+            @* </div> *@
 
-            <!-- ShiftEnd (отображать только если выбран DutySchedule) -->
-            <div class="form-group mb-3" id="shiftEndField" style="display: none;">
-                <label asp-for="NewEmployee.ShiftEnd" class="form-label">Конец смены</label>
-                <input asp-for="NewEmployee.ShiftEnd" class="form-control" type="datetime-local" />
-                <span asp-validation-for="NewEmployee.ShiftEnd" class="text-danger"></span>
-            </div>
+            @* <!-- ShiftEnd (отображать только если выбран DutySchedule) --> *@
+            @* <div class="form-group mb-3" id="shiftEndField" style="display: none;"> *@
+            @*     <label asp-for="NewEmployee.ShiftEnd" class="form-label">Конец смены</label> *@
+            @*     <input asp-for="NewEmployee.ShiftEnd" class="form-control" type="datetime-local" /> *@
+            @*     <span asp-validation-for="NewEmployee.ShiftEnd" class="text-danger"></span> *@
+            @* </div> *@
 
             <script>
                 // Скрыть или показать поля для ShiftStart и ShiftEnd в зависимости от выбора DutySchedule

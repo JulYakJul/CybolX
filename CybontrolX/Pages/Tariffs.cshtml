@@ -1,4 +1,34 @@
 ﻿@page
-@model CybontrolX.Pages.TariffsModel
-@{
-}
+@model TariffsModel
+
+<div class="tariffs-container">
+    <h1>Тарифы</h1>
+
+    <div class="toolbar">
+        <input type="text" placeholder="Поиск тарифа" class="search-bar" />
+        <button class="add-button">+ Добавить</button>
+    </div>
+
+    <div class="tariff-list">
+        @foreach (var tariff in Model.Tariffs)
+        {
+            <div class="tariff-card">
+                <h2>@tariff.Name</h2>
+                <div class="tariff-details">
+                    <span>Цена: @tariff.Price р</span>
+                    <span>Длительность: @tariff.SessionTime мин</span>
+                    <span>Дни: @tariff.Days</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .tariffs-container { padding: 20px; color: white; }
+    .toolbar { display: flex; justify-content: space-between; margin-bottom: 20px; }
+    .search-bar { padding: 5px; width: 200px; }
+    .add-button { background-color: purple; color: white; padding: 5px 10px; border: none; cursor: pointer; }
+    .tariff-list { display: flex; gap: 15px; }
+    .tariff-card { background: #222; padding: 15px; border-radius: 8px; }
+</style>
