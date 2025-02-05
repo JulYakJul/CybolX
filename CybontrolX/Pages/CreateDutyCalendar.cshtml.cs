@@ -24,7 +24,7 @@ namespace CybontrolX.Pages
         public int EmployeeId { get; set; }
 
         [BindProperty]
-        public string DutyDates { get; set; } // Получаем список дат как строку
+        public string DutyDates { get; set; }
 
         [BindProperty]
         public TimeSpan ShiftStart { get; set; }
@@ -54,13 +54,39 @@ namespace CybontrolX.Pages
                     DateTimeKind.Utc))
                 .ToList();
 
-            var schedules = dates.Select(date => new DutySchedule
+            var schedules = new List<DutySchedule>();
+
+            foreach (var date in dates)
             {
-                EmployeeId = EmployeeId,
-                DutyDate = date,
-                ShiftStart = ShiftStart,
-                ShiftEnd = ShiftEnd
-            });
+                if (ShiftEnd < ShiftStart)
+                {
+                    schedules.Add(new DutySchedule
+                    {
+                        EmployeeId = EmployeeId,
+                        DutyDate = date,
+                        ShiftStart = ShiftStart,
+                        ShiftEnd = TimeSpan.FromHours(23) + TimeSpan.FromMinutes(59) + TimeSpan.FromSeconds(59)
+                    });
+
+                    schedules.Add(new DutySchedule
+                    {
+                        EmployeeId = EmployeeId,
+                        DutyDate = date.AddDays(1),
+                        ShiftStart = TimeSpan.Zero,
+                        ShiftEnd = ShiftEnd
+                    });
+                }
+                else
+                {
+                    schedules.Add(new DutySchedule
+                    {
+                        EmployeeId = EmployeeId,
+                        DutyDate = date,
+                        ShiftStart = ShiftStart,
+                        ShiftEnd = ShiftEnd
+                    });
+                }
+            }
 
             _context.DutySchedules.AddRange(schedules);
             await _context.SaveChangesAsync();

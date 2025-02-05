@@ -1,0 +1,79 @@
+﻿@page
+@model CybontrolX.Pages.EditDutyCalendarModel
+@{
+    ViewData["Title"] = "Редактирование графика дежурств";
+}
+
+<h1>Редактирование графика дежурств</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="EmployeeId" class="form-label">Выберите сотрудника:</label>
+        <select asp-for="EmployeeId" class="form-control" required asp-items="@(new SelectList(Model.Employees, "Id", "Surname"))" onchange="updateDutyDates()">
+            <option value="">Выберите сотрудника</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Выберите даты и время дежурств:</label>
+        <input type="text" id="dutyDates" name="DutyDates" class="form-control" value="@Model.DutyDates" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="ShiftStart" class="form-label">Начало смены:</label>
+        <input type="time" asp-for="ShiftStart" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="ShiftEnd" class="form-label">Конец смены:</label>
+        <input type="time" asp-for="ShiftEnd" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+</form>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Инициализация flatpickr
+            flatpickr("#dutyDates", {
+                mode: "multiple",        // Выбор нескольких дат
+                dateFormat: "Y-m-d",       // Формат даты
+                locale: "ru",              // Русская локализация
+                minDate: "today",          // Запрет на выбор прошедших дат
+                allowInput: true,          // Разрешить ввод вручную
+                defaultDate: @Html.Raw(Json.Serialize(Model.DutyDates.Split(','))) // Преобразуем даты в JSON формат
+            });
+        });
+
+        function updateDutyDates() {
+            var employeeId = document.getElementById('EmployeeId').value;
+
+            // Отправляем AJAX-запрос для получения дежурств сотрудника
+            if (employeeId) {
+                fetch(`/EditDutyCalendar?employeeId=${employeeId}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Обновляем поле "Выберите даты и время дежурств"
+                        flatpickr("#dutyDates", {
+                            mode: "multiple",
+                            dateFormat: "Y-m-d",
+                            locale: "ru",
+                            minDate: "today",
+                            allowInput: true,
+                            defaultDate: data.dutyDates.split(',') // Даты, полученные с сервера
+                        });
+                    })
+                    .catch(error => console.error('Error fetching duty dates:', error));
+            }
+        }
+    </script>
+}
